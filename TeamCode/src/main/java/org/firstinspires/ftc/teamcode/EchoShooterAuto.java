@@ -6,163 +6,125 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robot.DriveTrain;
 import org.firstinspires.ftc.robot.FlyWheel;
 import org.firstinspires.ftc.robot.Hitter;
+import org.firstinspires.ftc.robot.Intake;
+import org.firstinspires.ftc.robot.WobbleSystem;
+import org.firstinspires.ftc.robot_utilities.RotationController;
 import org.firstinspires.ftc.robot_utilities.Vals;
+import org.firstinspires.ftc.robot_utilities.VisionController;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name="EchoShooterAuto")
-public class EchoShooterAuto extends LinearOpMode {
-    private Motor driveLeft, driveRight;
+public class EchoShooterAuto extends OpMode {
+
+    ElapsedTime elapsedTime;
+    VisionController visionController;
+    RotationController rotationController;
+
+    private DriveTrain driveTrain;
     private FlyWheel flywheel;
+    private WobbleSystem wobbleSystem;
     private Hitter hitter;
-    private Motor intake1, intake2;
-    private BNO055IMU imu;
+    private Intake intake;
 
-    private ElapsedTime elapsedTime;
-    private Orientation lastAngles;
-    private double currentHeading = 0;
-    private PIDController pidRotate;
+    boolean notStarted = true;
+    double driveSpeed = 0.4;
+    int shotsFired = 0;
 
-    private double driveSpeed = 0.6;
-
-
-    public void initRobot() {
-
+    @Override
+    public void init() {
         elapsedTime = new ElapsedTime();
 
-        driveLeft = new Motor(hardwareMap, "dl");
-        driveRight = new Motor(hardwareMap, "dr");
-        driveRight.setInverted(true);
-        driveLeft.setRunMode(Motor.RunMode.RawPower);
-        driveRight.setRunMode(Motor.RunMode.RawPower);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvInternalCamera phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        visionController = new VisionController(phoneCam);
 
-        intake1 = new Motor(hardwareMap, "in1");
-        intake2 = new Motor(hardwareMap, "in2");
-        intake1.setRunMode(Motor.RunMode.VelocityControl);
-        intake2.setRunMode(Motor.RunMode.VelocityControl);
-        intake1.setVeloCoefficients(0.05, 0, 0);
-        intake2.setVeloCoefficients(0.05, 0, 0);
+        rotationController = new RotationController(hardwareMap.get(BNO055IMU.class, "imu"));
+        rotationController.resetAngle();
 
+        driveTrain = new DriveTrain(new Motor(hardwareMap, "dl"), new Motor(hardwareMap, "dr"));
+        driveTrain.resetEncoders();
         flywheel = new FlyWheel(new Motor(hardwareMap, "fw", Motor.GoBILDA.BARE), telemetry);
+        wobbleSystem = new WobbleSystem(new Motor(hardwareMap, "wobbleArmMotor"), hardwareMap.servo.get("wobbleArmServo"));
+        wobbleSystem.hand_close();
         hitter = new Hitter(hardwareMap.servo.get("sv"));
-
-        pidRotate = new PIDController(Vals.rotate_kp, Vals.rotate_ki, Vals.rotate_kd);
-        pidRotate.setTolerance(Vals.rotate_tolerance);
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        resetAngle();
+        intake = new Intake(new Motor(hardwareMap, "in1"),  new Motor(hardwareMap, "in2"));
     }
+
     @Override
-    public void runOpMode() {
-        initRobot();
-        waitForStart();
+    public void loop() {
+        if(notStarted) {
+            elapsedTime.reset();
 
-        elapsedTime.reset();
-
-        while(elapsedTime.seconds() < 1.82) {
-            double rotatePower = rotate(0);
-            double leftPower = -rotatePower;
-            double rightPower = rotatePower;
-
-            leftPower += driveSpeed;
-            rightPower += driveSpeed;
-
-            driveLeft.set(leftPower);
-            driveRight.set(rightPower);
+            notStarted = false;
+            return;
         }
-        while (elapsedTime.seconds() < 2) {
-            driveLeft.set(0);
-            driveRight.set(0);
-        }
-        int tick = 0;
-        while (tick < 3 && elapsedTime.seconds() < 17) {
-            flywheel.on();
-            if(flywheel.isReady()) {
-                hitter.hitFullMotion(0.71);
-                tick++;
+
+        if(elapsedTime.seconds() < 1.2) {
+            double rotatePower = rotationController.rotate(-10);
+            double leftPower = -rotatePower + driveSpeed;
+            double rightPower = rotatePower + driveSpeed;
+            driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+        } else if(shotsFired == 0) {
+            telemetry.addData("In Shots Fired", 0);
+            driveTrain.stop();
+            flywheel.on_slow();
+            if(flywheel.isReadySlow()) {
+                hitter.hitFullMotion(0.7);
+                shotsFired++;
+                rotationController.resetAngle();
             }
-        }
-        elapsedTime.reset();
-        while (elapsedTime.seconds() < 1) {
-            driveLeft.set(0);
-            driveRight.set(0);
-        }
-        while (elapsedTime.seconds() < 1.8) {
-            double rotatePower = rotate(0);
+        } else if(shotsFired == 1) {
+            telemetry.addData("In Shots Fired", 1);
+            flywheel.on_slow();
+
+            double rotatePower = rotationController.rotate(5);
             double leftPower = -rotatePower;
             double rightPower = rotatePower;
+            driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
-            leftPower += driveSpeed;
-            rightPower += driveSpeed;
+            if(flywheel.isReadySlow() && rotationController.atRotation()) {
+                shotsFired++;
+                hitter.hitFullMotion(0.7);
+                rotationController.resetAngle();
+                driveTrain.stop();
+            }
 
-            driveLeft.set(leftPower);
-            driveRight.set(rightPower);
-        }
-        while ( elapsedTime.seconds() < 2) {
-            flywheel.off();
-        }
-        while (elapsedTime.seconds() < 3) {
-            driveLeft.set(0);
-            driveRight.set(0);
-        }
-        while (elapsedTime.seconds() < 3.4) {
-            double rotatePower = rotate(0);
+        } else if(shotsFired == 2) {
+            telemetry.addData("In Shots Fired", 2);
+            flywheel.on_slow();
+
+            double rotatePower = rotationController.rotate(5);
             double leftPower = -rotatePower;
             double rightPower = rotatePower;
+            driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
-            leftPower -= driveSpeed;
-            rightPower -= driveSpeed;
+            if(flywheel.isReadySlow() && rotationController.atRotation()) {
+                shotsFired++;
+                hitter.hitFullMotion(0.7);
+                rotationController.resetAngle();
+                driveTrain.stop();
+            }
 
-            driveLeft.set(leftPower);
-            driveRight.set(rightPower);
-        }
-        while(elapsedTime.seconds() < 4) {
-            driveLeft.set(0);
-            driveRight.set(0);
-        }
-        stop();
-    }
-
-    private void resetAngle() {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        currentHeading = 0;
-        pidRotate.reset();
-    }
-
-    private double updateHeading() {
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
-        if(deltaAngle < -180) {
-            deltaAngle += 360;
-        } else if(deltaAngle > 180) {
-            deltaAngle -= 360;
+        } else {
+            requestOpModeStop();
         }
 
-        currentHeading += deltaAngle;
-        lastAngles = angles;
-
-        return currentHeading;
-    }
-
-    private double rotate(double degrees) {
-        if(Math.abs(degrees) > 359) degrees = Math.copySign(359, degrees);
-
-        double power = pidRotate.calculate(updateHeading(), degrees);
-        return power;
+        telemetry.addData("Shots Fired", shotsFired);
+        telemetry.addData("Rotation Angle Radians", rotationController.getAngleRadians());
+        telemetry.addData("Rotation At Rotation", rotationController.atRotation());
+        telemetry.addData("DriveLeft Speed", driveTrain.driveLeft.get());
+        telemetry.addData("DriveRight Speed", driveTrain.driveRight.get());
 
     }
 }

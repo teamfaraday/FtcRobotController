@@ -12,16 +12,18 @@ public class Vals {
     public static double flywheel_ff = 0.00827;
     public static double flywheel_tolerance = 1;
     public static double flywheel_speed = 930;
-    public static double flywheel_powershot_speed = 850;
+    public static double flywheel_powershot_speed = 840;
     public static double flywheel_direction = -1;
     public static int flywheel_ready_ticks = 5;
     public static int flywheel_ready_min_speed = 850;
     public static int flywheel_ready_max_speed = 950;
+    public static int flywheel_ready_slow_min_speed = 750;
+    public static int flywheel_ready_slow_max_speed = 850;
     public static double flywheel_filtered_speed = 0;
     public static int flywheel_max_achievable_ticks = 1360;
 
-    public static double rotate_kp = .015;
-    public static double rotate_ki = .11;
+    public static double rotate_kp = .014;
+    public static double rotate_ki = .15;
     public static double rotate_kd = .0003;
     public static double rotate_tolerance = 1;
     public static double rotate_target = 0;
@@ -38,6 +40,8 @@ public class Vals {
     public static double drive_target_y = -65;
     public static double drive_linear_velocity_mps = .1;
     public static double drive_angular_velocity_radians = 1;
+
+    public static double intake_speed = 0.7;
 
     public static final double POSITION_PRE_MOVEMENT = 5;
 
@@ -57,7 +61,7 @@ public class Vals {
     public static int wobble_arm_mid_pos = -1000;
     public static double wobble_hand_close = .45;
     public static double wobble_hand_open = 0;
-    public static double wobble_arm_kp = 0.004;
+    public static double wobble_arm_kp = 0.003;
     public static double wobble_arm_tolerance = 20;
 
     public static double initialMotorPosition = 0.0;

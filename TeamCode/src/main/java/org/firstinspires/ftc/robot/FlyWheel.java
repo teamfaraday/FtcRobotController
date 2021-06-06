@@ -117,6 +117,18 @@ public class FlyWheel {
         return false;
     }
 
+    public boolean isReadySlow() {
+
+        if(this.lastVelocity >= Vals.flywheel_ready_slow_min_speed && lastVelocity <= Vals.flywheel_ready_slow_max_speed) ticks++;
+        else ticks = 0;
+
+        if(ticks >= Vals.flywheel_ready_ticks) {
+            ticks = 0;
+            return true;
+        }
+        return false;
+    }
+
     private void updateVelocity() {
         double velocity = Math.abs(flywheel.getCorrectedVelocity());
         if(lastTimeStamp == 0) {

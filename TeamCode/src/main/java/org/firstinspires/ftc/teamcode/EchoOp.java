@@ -175,6 +175,7 @@ public class EchoOp extends OpMode {
         telemetry.addData("Wobble Arm Position", wobbleSystem.wobbleArm.getCurrentPosition());
         telemetry.addData("Wobble Arm Rotations", wobbleSystem.wobbleArm.getCurrentPosition());
         telemetry.addData("Wobble Arm Distance", wobbleSystem.wobbleArm.getDistance());
+        telemetry.addData("Wobble Hand Position", wobbleSystem.wobbleHand.getPosition());
 
         Pose2d pose = odometry.getPoseMeters();
         telemetry.addData("X Pos: ", pose.getX());
