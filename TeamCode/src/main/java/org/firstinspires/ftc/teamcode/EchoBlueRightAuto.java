@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robot.DriveTrain;
@@ -17,7 +17,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 @Autonomous(name = "EchoBlueRightAuto", group = "Echo Autos")
-public class EchoBlueRightAuto extends LinearOpMode {
+public class EchoBlueRightAuto extends OpMode {
 
     ElapsedTime elapsedTime;
     VisionController visionController;
@@ -29,8 +29,11 @@ public class EchoBlueRightAuto extends LinearOpMode {
     private Hitter hitter;
     private Intake intake;
 
+    boolean notStarted = true;
+    int ringStackSize = -1;
 
-    private void initRobot() {
+
+    public void init() {
         elapsedTime = new ElapsedTime();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -51,18 +54,20 @@ public class EchoBlueRightAuto extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void loop() {
+        if(notStarted) {
+            ringStackSize = visionController.getRingPosition();
+            elapsedTime.reset();
 
-        initRobot();
-        waitForStart();
+            notStarted = false;
+            return;
+        }
 
         double driveSpeed = 0.4;
 
-        elapsedTime.reset();
-
-        switch(visionController.getRingPosition()) {
+        switch(ringStackSize) {
             case 0:
-                while(elapsedTime.seconds() < 1.7) {
+                if(elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -73,22 +78,18 @@ public class EchoBlueRightAuto extends LinearOpMode {
 
 
                     driveTrain.setSpeedPositiveForward(leftPower, rightPower);
-                }
-
-                while(elapsedTime.seconds() < 3) {
+                } else if(elapsedTime.seconds() < 3) {
                     driveTrain.stop();
-                }
-
-                while(elapsedTime.seconds() < 4.5) {
+                } else if(elapsedTime.seconds() < 4.5) {
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-                }
-
-                while(elapsedTime.seconds() < 5.5) {
+                } else if(elapsedTime.seconds() < 5.5) {
                     wobbleSystem.hand_open();
+                } else {
+                    requestOpModeStop();
                 }
                 break;
             case 1:
