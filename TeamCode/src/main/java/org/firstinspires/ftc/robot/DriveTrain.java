@@ -41,6 +41,10 @@ public class DriveTrain {
         this.driveRight.setRunMode(runMode);
     }
 
+    public void stop() {
+        setSpeed(0, 0);
+    }
+
     public void setSpeed(double leftSpeed, double rightSpeed) {
         driveLeft.set(-leftSpeed);
         driveRight.set(rightSpeed);

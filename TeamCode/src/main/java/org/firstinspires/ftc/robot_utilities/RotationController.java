@@ -57,6 +57,10 @@ public class RotationController {
         return currentHeading;
     }
 
+    public boolean atRotation() {
+        return pidRotate.atSetPoint();
+    }
+
     public double rotate(double degrees) {
         if(Math.abs(degrees) > 359) degrees = Math.copySign(359, degrees);
 

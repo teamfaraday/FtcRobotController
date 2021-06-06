@@ -34,7 +34,6 @@ public class Intake {
         intake2.set(0);
     }
 
-
-
-
 }
+
+
