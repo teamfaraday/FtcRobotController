@@ -23,6 +23,7 @@ public class EchoRedRightAuto extends OpMode {
     boolean notStarted = true;
     int ringStackSize = -1;
     int shotsFired = 0;
+    int ticks = 0;
     private DriveTrain driveTrain;
     private FlyWheel flywheel;
     private WobbleSystem wobbleSystem;
@@ -88,46 +89,11 @@ public class EchoRedRightAuto extends OpMode {
                 elapsedTime.reset();
 
                 //Shoot 3 high goals.
-                if (shotsFired == 0) {
-                    telemetry.addData("In Shots Fired", 0);
-                    driveTrain.stop();
-                    flywheel.on_slow();
-                    if (flywheel.isReadySlow()) {
-                        hitter.hitFullMotion(0.7);
-                        shotsFired++;
-                        rotationController.resetAngle();
-                    }
-                } else if (shotsFired == 1) {
-                    telemetry.addData("In Shots Fired", 1);
-                    flywheel.on_slow();
+                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
-
-                } else if (shotsFired == 2) {
-                    telemetry.addData("In Shots Fired", 2);
-                    flywheel.on_slow();
-
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
+                    flywheel.on();
+                    hitter.hitFullMotion(0.7);
+                    ticks++;
 
                 }
 
@@ -202,46 +168,11 @@ public class EchoRedRightAuto extends OpMode {
                 elapsedTime.reset();
 
                 //Shoot 3 high goals.
-                if (shotsFired == 0) {
-                    telemetry.addData("In Shots Fired", 0);
-                    driveTrain.stop();
-                    flywheel.on_slow();
-                    if (flywheel.isReadySlow()) {
-                        hitter.hitFullMotion(0.7);
-                        shotsFired++;
-                        rotationController.resetAngle();
-                    }
-                } else if (shotsFired == 1) {
-                    telemetry.addData("In Shots Fired", 1);
-                    flywheel.on_slow();
+                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
-
-                } else if (shotsFired == 2) {
-                    telemetry.addData("In Shots Fired", 2);
-                    flywheel.on_slow();
-
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
+                    flywheel.on();
+                    hitter.hitFullMotion(0.7);
+                    ticks++;
 
                 }
 
@@ -316,46 +247,11 @@ public class EchoRedRightAuto extends OpMode {
                 elapsedTime.reset();
 
                 //Shoot 3 high goals.
-                if (shotsFired == 0) {
-                    telemetry.addData("In Shots Fired", 0);
-                    driveTrain.stop();
-                    flywheel.on_slow();
-                    if (flywheel.isReadySlow()) {
-                        hitter.hitFullMotion(0.7);
-                        shotsFired++;
-                        rotationController.resetAngle();
-                    }
-                } else if (shotsFired == 1) {
-                    telemetry.addData("In Shots Fired", 1);
-                    flywheel.on_slow();
+                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
-
-                } else if (shotsFired == 2) {
-                    telemetry.addData("In Shots Fired", 2);
-                    flywheel.on_slow();
-
-                    double shootingRotatePower = rotationController.rotate(5);
-                    double shootingLeftPower = -shootingRotatePower;
-                    double shootingRightPower = shootingRotatePower;
-                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
-
-                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
-                        shotsFired++;
-                        hitter.hitFullMotion(0.7);
-                        rotationController.resetAngle();
-                        driveTrain.stop();
-                    }
+                    flywheel.on();
+                    hitter.hitFullMotion(0.7);
+                    ticks++;
 
                 }
 
