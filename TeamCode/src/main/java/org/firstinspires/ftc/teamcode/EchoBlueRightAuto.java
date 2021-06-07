@@ -22,16 +22,14 @@ public class EchoBlueRightAuto extends OpMode {
     ElapsedTime elapsedTime;
     VisionController visionController;
     RotationController rotationController;
-
+    boolean notStarted = true;
+    int ringStackSize = -1;
+    int shotsFired = 0;
     private DriveTrain driveTrain;
     private FlyWheel flywheel;
     private WobbleSystem wobbleSystem;
     private Hitter hitter;
     private Intake intake;
-
-    boolean notStarted = true;
-    int ringStackSize = -1;
-
 
     public void init() {
         elapsedTime = new ElapsedTime();
@@ -49,13 +47,13 @@ public class EchoBlueRightAuto extends OpMode {
         wobbleSystem = new WobbleSystem(new Motor(hardwareMap, "wobbleArmMotor"), hardwareMap.servo.get("wobbleArmServo"));
         wobbleSystem.hand_close();
         hitter = new Hitter(hardwareMap.servo.get("sv"));
-        intake = new Intake(new Motor(hardwareMap, "in1"),  new Motor(hardwareMap, "in2"));
+        intake = new Intake(new Motor(hardwareMap, "in1"), new Motor(hardwareMap, "in2"));
 
     }
 
     @Override
     public void loop() {
-        if(notStarted) {
+        if (notStarted) {
             ringStackSize = visionController.getRingPosition();
             elapsedTime.reset();
 
@@ -65,9 +63,95 @@ public class EchoBlueRightAuto extends OpMode {
 
         double driveSpeed = 0.4;
 
-        switch(ringStackSize) {
+        switch (ringStackSize) {
             case 0:
-                if(elapsedTime.seconds() < 1.7) {
+
+                //Since is right position, no angle rotation.
+
+                //Drive up.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(0);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+
+                elapsedTime.reset();
+
+                //Tower shots for now.
+                if (shotsFired == 0) {
+                    telemetry.addData("In Shots Fired", 0);
+                    driveTrain.stop();
+                    flywheel.on_slow();
+                    if (flywheel.isReadySlow()) {
+                        hitter.hitFullMotion(0.7);
+                        shotsFired++;
+                        rotationController.resetAngle();
+                    }
+                } else if (shotsFired == 1) {
+                    telemetry.addData("In Shots Fired", 1);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                } else if (shotsFired == 2) {
+                    telemetry.addData("In Shots Fired", 2);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                }
+
+                elapsedTime.reset();
+
+
+                //Go around.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(-45);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+                elapsedTime.reset();
+
+                // Deliver to A
+                if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -78,24 +162,300 @@ public class EchoBlueRightAuto extends OpMode {
 
 
                     driveTrain.setSpeedPositiveForward(leftPower, rightPower);
-                } else if(elapsedTime.seconds() < 3) {
+                } else if (elapsedTime.seconds() < 3) {
                     driveTrain.stop();
-                } else if(elapsedTime.seconds() < 4.5) {
+                } else if (elapsedTime.seconds() < 4.5) {
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-                } else if(elapsedTime.seconds() < 5.5) {
+                } else if (elapsedTime.seconds() < 5.5) {
                     wobbleSystem.hand_open();
+                }
+
+                elapsedTime.reset();
+
+                // Park
+                if (elapsedTime.seconds() < 1.7) {
+                    double parkRotatePower = rotationController.rotate(0);
+
+                    double parkLeftPower = -parkRotatePower;
+                    double parkRightPower = parkRotatePower;
+
+                    parkLeftPower += driveSpeed;
+                    parkRightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
                 } else {
+
                     requestOpModeStop();
+
+                }
+
+                break;
+
+            case 1:
+                //Drive up.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(0);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+
+                elapsedTime.reset();
+
+                //Tower shots for now.
+                if (shotsFired == 0) {
+                    telemetry.addData("In Shots Fired", 0);
+                    driveTrain.stop();
+                    flywheel.on_slow();
+                    if (flywheel.isReadySlow()) {
+                        hitter.hitFullMotion(0.7);
+                        shotsFired++;
+                        rotationController.resetAngle();
+                    }
+                } else if (shotsFired == 1) {
+                    telemetry.addData("In Shots Fired", 1);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                } else if (shotsFired == 2) {
+                    telemetry.addData("In Shots Fired", 2);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                }
+
+                elapsedTime.reset();
+
+
+                //Go around.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(-45);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+
+                elapsedTime.reset();
+
+                // Deliver to B
+                if (elapsedTime.seconds() < 3.9) {
+                    double rotatePower = rotationController.rotate(22);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                } else if (elapsedTime.seconds() < 7) {
+                    driveTrain.stop();
+                } else if (elapsedTime.seconds() < 4.5) {
+                    telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
+                    telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
+                    telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
+                    telemetry.update();
+                    wobbleSystem.arm_down();
+                } else if (elapsedTime.seconds() < 9) {
+                    wobbleSystem.hand_open();
+                }
+
+                elapsedTime.reset();
+
+                // Park
+                if (elapsedTime.seconds() < 1.7) {
+                    double parkRotatePower = rotationController.rotate(0);
+
+                    double parkLeftPower = -parkRotatePower;
+                    double parkRightPower = parkRotatePower;
+
+                    parkLeftPower += driveSpeed;
+                    parkRightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
+                } else {
+
+                    requestOpModeStop();
+
                 }
                 break;
-            case 1:
+
+            case 4://Drive up.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(0);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+
+                elapsedTime.reset();
+
+                //Tower shots for now.
+                if (shotsFired == 0) {
+                    telemetry.addData("In Shots Fired", 0);
+                    driveTrain.stop();
+                    flywheel.on_slow();
+                    if (flywheel.isReadySlow()) {
+                        hitter.hitFullMotion(0.7);
+                        shotsFired++;
+                        rotationController.resetAngle();
+                    }
+                } else if (shotsFired == 1) {
+                    telemetry.addData("In Shots Fired", 1);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                } else if (shotsFired == 2) {
+                    telemetry.addData("In Shots Fired", 2);
+                    flywheel.on_slow();
+
+                    double shootingRotatePower = rotationController.rotate(5);
+                    double shootingLeftPower = -shootingRotatePower;
+                    double shootingRightPower = shootingRotatePower;
+                    driveTrain.setSpeedPositiveForward(shootingLeftPower, shootingRightPower);
+
+                    if (flywheel.isReadySlow() && rotationController.atRotation()) {
+                        shotsFired++;
+                        hitter.hitFullMotion(0.7);
+                        rotationController.resetAngle();
+                        driveTrain.stop();
+                    }
+
+                }
+
+                elapsedTime.reset();
+
+
+                //Go around.
+                if (elapsedTime.seconds() < 1.7) {
+
+                    double rotatePower = rotationController.rotate(-45);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+                }
+
+                elapsedTime.reset();
+
+                // Deliver to C
+                if (elapsedTime.seconds() < 5) {
+                    double rotatePower = rotationController.rotate(22);
+
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                } else if (elapsedTime.seconds() < 8) {
+                    driveTrain.stop();
+                } else if (elapsedTime.seconds() < 4.5) {
+                    telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
+                    telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
+                    telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
+                    telemetry.update();
+                    wobbleSystem.arm_down();
+                } else if (elapsedTime.seconds() < 11) {
+                    wobbleSystem.hand_open();
+                }
+
+                elapsedTime.reset();
+
+                // Park
+                if (elapsedTime.seconds() < 1.7) {
+                    double parkRotatePower = rotationController.rotate(0);
+
+                    double parkLeftPower = -parkRotatePower;
+                    double parkRightPower = parkRotatePower;
+
+                    parkLeftPower += driveSpeed;
+                    parkRightPower += driveSpeed;
+
+
+                    driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
+                } else {
+
+                    requestOpModeStop();
+
+                }
                 break;
-            case 4:
-                break;
+
             default:
                 stop();
         }

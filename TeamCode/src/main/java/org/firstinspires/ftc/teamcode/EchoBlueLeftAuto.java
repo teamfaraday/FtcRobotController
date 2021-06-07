@@ -134,62 +134,26 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 //Deliver wobble goal to A (filled with mock data)
                 if (elapsedTime.seconds() < 1.7) {
-                    double wobbleRotatePower = rotationController.rotate(22);
+                    double rotatePower = rotationController.rotate(22);
 
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
 
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
 
 
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
                 } else if (elapsedTime.seconds() < 3) {
-
                     driveTrain.stop();
-
                 } else if (elapsedTime.seconds() < 4.5) {
-
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-
                 } else if (elapsedTime.seconds() < 5.5) {
-
                     wobbleSystem.hand_open();
-
-                } else if (elapsedTime.seconds() < 7) {
-
-                    wobbleSystem.hand_close();
-
-                } else if (elapsedTime.seconds() < 8.5) {
-
-                    wobbleSystem.arm_up();
-
-                } else if (elapsedTime.seconds() < 10) {
-
-                    double wobbleRotatePower = rotationController.rotate(22);
-
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
-
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
-
-
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
-                } else if (elapsedTime.seconds() < 11.5) {
-
-                    wobbleSystem.arm_down();
-
-                } else if (elapsedTime.seconds() < 13) {
-
-                    wobbleSystem.hand_close();
-
                 }
 
                 elapsedTime.reset();
@@ -206,6 +170,10 @@ public class EchoBlueLeftAuto extends OpMode {
 
 
                     driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
+                }  else {
+
+                    requestOpModeStop();
 
                 }
 
@@ -297,64 +265,29 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 //Deliver wobble goal to B.
                 if (elapsedTime.seconds() < 1.7) {
-                    double wobbleRotatePower = rotationController.rotate(22);
+                    double rotatePower = rotationController.rotate(22);
 
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
 
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
 
 
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
                 } else if (elapsedTime.seconds() < 3) {
-
                     driveTrain.stop();
-
                 } else if (elapsedTime.seconds() < 4.5) {
-
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-
                 } else if (elapsedTime.seconds() < 5.5) {
-
                     wobbleSystem.hand_open();
-
-                } else if (elapsedTime.seconds() < 7) {
-
-                    wobbleSystem.hand_close();
-
-                } else if (elapsedTime.seconds() < 8.5) {
-
-                    wobbleSystem.arm_up();
-
-                } else if (elapsedTime.seconds() < 10) {
-
-                    double wobbleRotatePower = rotationController.rotate(22);
-
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
-
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
-
-
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
-                } else if (elapsedTime.seconds() < 11.5) {
-
-                    wobbleSystem.arm_down();
-
-                } else if (elapsedTime.seconds() < 13) {
-
-                    wobbleSystem.hand_close();
-
                 }
 
+                elapsedTime.reset();
                 elapsedTime.reset();
 
                 //Park
@@ -369,6 +302,10 @@ public class EchoBlueLeftAuto extends OpMode {
 
 
                     driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
+                }  else {
+
+                    requestOpModeStop();
 
                 }
 
@@ -442,62 +379,26 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 //Deliver wobble goal to C (filled with mock data)
                 if (elapsedTime.seconds() < 1.7) {
-                    double wobbleRotatePower = rotationController.rotate(20);
+                    double rotatePower = rotationController.rotate(26);
 
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
 
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
+                    leftPower += driveSpeed;
+                    rightPower += driveSpeed;
 
 
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
-                } else if (elapsedTime.seconds() < 8) {
-
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                } else if (elapsedTime.seconds() < 3) {
                     driveTrain.stop();
-
-                } else if (elapsedTime.seconds() < 9) {
-
+                } else if (elapsedTime.seconds() < 4.5) {
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-
-                } else if (elapsedTime.seconds() < 10.5) {
-
+                } else if (elapsedTime.seconds() < 5.5) {
                     wobbleSystem.hand_open();
-
-                } else if (elapsedTime.seconds() < 12) {
-
-                    wobbleSystem.hand_close();
-
-                } else if (elapsedTime.seconds() < 13.5) {
-
-                    wobbleSystem.arm_up();
-
-                } else if (elapsedTime.seconds() < 15) {
-
-                    double wobbleRotatePower = rotationController.rotate(22);
-
-                    double wobbleLeftPower = -wobbleRotatePower;
-                    double wobbleRightPower = wobbleRotatePower;
-
-                    wobbleLeftPower += driveSpeed;
-                    wobbleRightPower += driveSpeed;
-
-
-                    driveTrain.setSpeedPositiveForward(wobbleLeftPower, wobbleRightPower);
-
-                } else if (elapsedTime.seconds() < 16.5) {
-
-                    wobbleSystem.arm_down();
-
-                } else if (elapsedTime.seconds() < 18) {
-
-                    wobbleSystem.hand_close();
-
                 }
 
                 elapsedTime.reset();
@@ -514,6 +415,10 @@ public class EchoBlueLeftAuto extends OpMode {
 
 
                     driveTrain.setSpeedPositiveForward(parkLeftPower, parkRightPower);
+
+                }  else {
+
+                    requestOpModeStop();
 
                 }
 
