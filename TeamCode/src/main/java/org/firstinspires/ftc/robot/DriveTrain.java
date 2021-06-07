@@ -23,12 +23,9 @@ public class DriveTrain {
         driveLeft.setRunMode(Motor.RunMode.VelocityControl);
         driveRight.setRunMode(Motor.RunMode.VelocityControl);
 //        driveLeft.setInverted(true);
-        driveLeft.setVeloCoefficients(0.05, 0, 0);
-        driveRight.setVeloCoefficients(0.05, 0, 0);
-        driveLeft.setFeedforwardCoefficients(1, 3);
-        driveRight.setFeedforwardCoefficients(1, 3);
-        driveLeft.setPositionCoefficient(0.05);
-        driveRight.setPositionCoefficient(0.05);
+        updatePID();
+        driveLeft.setPositionCoefficient(Vals.drive_kp);
+        driveRight.setPositionCoefficient(Vals.drive_kp);
 
         m_kinematics = new DifferentialDriveKinematics(Vals.TRACK_WIDTH_METERS);
         ff = new SimpleMotorFeedforward(Vals.drive_ks, Vals.drive_kv);
@@ -39,6 +36,13 @@ public class DriveTrain {
 
         this.driveLeft.setRunMode(runMode);
         this.driveRight.setRunMode(runMode);
+    }
+
+    public void updatePID() {
+        driveLeft.setVeloCoefficients(Vals.drive_kp, Vals.drive_ki, Vals.drive_kd);
+        driveRight.setVeloCoefficients(Vals.drive_kp, Vals.drive_ki, Vals.drive_kd);
+        driveLeft.setFeedforwardCoefficients(Vals.drive_ks, Vals.drive_kv);
+        driveRight.setFeedforwardCoefficients(Vals.drive_ks, Vals.drive_kv);
     }
 
     public void stop() {

@@ -89,6 +89,10 @@ public class PositionDriver extends OpMode {
             positionController.reset();
         }
 
+        if(gamepad.isXRelease()) {
+            driveTrain.updatePID();
+        }
+
         double leftSpeed = 0;
         double rightSpeed = 0;
         double linearVelocity = 0;

@@ -28,11 +28,11 @@ public class Vals {
     public static double rotate_tolerance = 1;
     public static double rotate_target = 0;
 
-    public static double drive_kp = .1;
-    public static double drive_ki = .11;
-    public static double drive_kd = .0003;
-    public static double drive_kv = 1;
-    public static double drive_ks = 3;
+    public static double drive_kp = .05;  //.1
+    public static double drive_ki = 0; //.11
+    public static double drive_kd = 0; //.0003
+    public static double drive_ks = 1;
+    public static double drive_kv = 3;
     public static double drive_ramsete_b = 2.0; //0.9
     public static double drive_ramsete_zeta = 0.7;
     public static double drive_tolerance = 1;
