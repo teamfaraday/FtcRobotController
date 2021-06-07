@@ -518,6 +518,9 @@ public class EchoBlueLeftAuto extends OpMode {
                 }
 
                 break;
+
+            default:
+                stop();
         }
     }
 }
