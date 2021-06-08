@@ -85,10 +85,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -96,11 +94,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
-
                 //Go around.
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(-45);
 
@@ -114,10 +109,9 @@ public class EchoBlueRightAuto extends OpMode {
                     driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
                 }
-                elapsedTime.reset();
 
                 // Deliver to A
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -140,10 +134,8 @@ public class EchoBlueRightAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 // Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -180,10 +172,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -191,11 +181,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
-
                 //Go around.
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(-45);
 
@@ -210,10 +197,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 // Deliver to B
-                if (elapsedTime.seconds() < 3.9) {
+                else if (elapsedTime.seconds() < 3.9) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -236,10 +221,8 @@ public class EchoBlueRightAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 // Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -276,10 +259,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -287,11 +268,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
-
                 //Go around.
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(-45);
 
@@ -306,10 +284,8 @@ public class EchoBlueRightAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 // Deliver to C
-                if (elapsedTime.seconds() < 5) {
+                else if (elapsedTime.seconds() < 5) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -332,10 +308,8 @@ public class EchoBlueRightAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 // Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;

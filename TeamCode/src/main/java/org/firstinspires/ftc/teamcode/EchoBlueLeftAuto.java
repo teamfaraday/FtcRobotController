@@ -81,10 +81,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -92,10 +90,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver wobble goal to A (filled with mock data)
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -118,10 +114,8 @@ public class EchoBlueLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -155,10 +149,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Avoid rings.
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double avoidRotatePower = rotationController.rotate(-45);
 
@@ -173,10 +165,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -184,10 +174,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver wobble goal to B.
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -210,11 +198,8 @@ public class EchoBlueLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -259,10 +244,8 @@ public class EchoBlueLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver wobble goal to C (filled with mock data)
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(26);
 
                     double leftPower = -rotatePower;
@@ -285,10 +268,8 @@ public class EchoBlueLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;

@@ -82,10 +82,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Drive forward
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(0);
 
@@ -100,10 +98,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -111,10 +107,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver 1 wobble goal to A
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -137,10 +131,8 @@ public class EchoRedLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -175,10 +167,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Drive forward
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(0);
 
@@ -193,10 +183,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -204,10 +192,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver 1 wobble goal to B
-                if (elapsedTime.seconds() < 3) {
+                else if (elapsedTime.seconds() < 3) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -230,10 +216,8 @@ public class EchoRedLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
@@ -267,10 +251,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Drive forward
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
 
                     double rotatePower = rotationController.rotate(0);
 
@@ -285,10 +267,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Shoot 3 high goals.
-                if (ticks < 3 && elapsedTime.seconds() < 1.7) {
+                else if (ticks < 3 && elapsedTime.seconds() < 1.7) {
 
                     flywheel.on();
                     hitter.hitFullMotion(0.7);
@@ -296,10 +276,8 @@ public class EchoRedLeftAuto extends OpMode {
 
                 }
 
-                elapsedTime.reset();
-
                 //Deliver 1 wobble goal to C
-                if (elapsedTime.seconds() < 4) {
+                else if (elapsedTime.seconds() < 4) {
                     double rotatePower = rotationController.rotate(22);
 
                     double leftPower = -rotatePower;
@@ -322,10 +300,8 @@ public class EchoRedLeftAuto extends OpMode {
                     wobbleSystem.hand_open();
                 }
 
-                elapsedTime.reset();
-
                 //Park
-                if (elapsedTime.seconds() < 1.7) {
+                else if (elapsedTime.seconds() < 1.7) {
                     double parkRotatePower = rotationController.rotate(0);
 
                     double parkLeftPower = -parkRotatePower;
