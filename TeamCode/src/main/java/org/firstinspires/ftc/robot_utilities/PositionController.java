@@ -84,7 +84,7 @@ public class PositionController {
 
         driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
-        return pDrive.atSetPoint();
+        return (leftPower + rightPower) / 2 < Vals.POWER_THRESHOLD;
     }
 
     /**
