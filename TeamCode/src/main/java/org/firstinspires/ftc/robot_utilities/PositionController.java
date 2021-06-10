@@ -1,47 +1,40 @@
 package org.firstinspires.ftc.robot_utilities;
+import com.arcrobotics.ftclib.controller.PController;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.wpilibcontroller.SimpleMotorFeedforward;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.wpilibkinematics.DifferentialDriveOdometry;
 import com.arcrobotics.ftclib.trajectory.Trajectory;
 
+import org.firstinspires.ftc.robot.DriveTrain;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class PositionController {
 
-    public DifferentialDriveOdometry odometry;
-    private PIDController pidDrive;
+    private PController pDrive;
+    private SimpleMotorFeedforward ffLeft;
+    private SimpleMotorFeedforward ffRight;
     private RotationController rotationController;
 
-    private Trajectory m_trajectory;
+    public DriveTrain driveTrain;
 
-    private Pose2d startPose;
-    private Pose2d m_poseError = new Pose2d();
-    private Pose2d m_poseTolerance = new Pose2d();
+    private double lastLeftPower = 0;
+    private double lastRightPower = 0;
 
-    public PositionController(Pose2d currentPose,
-                              RotationController rotationController,
-                              double b,
-                              double zeta) {
-        pidDrive = new PIDController(Vals.drive_kp, Vals.drive_ki, Vals.drive_kd);
-        pidDrive.setTolerance(Vals.drive_tolerance);
+    public PositionController(RotationController rotationController,
+                              Motor driveLeft, Motor driveRight) {
+
+        this.driveTrain = new DriveTrain(driveLeft, driveRight, Motor.RunMode.RawPower);
+
+        pDrive = new PController(Vals.drive_position_kp);
+        pDrive.setTolerance(Vals.drive_tolerance);
+
+        ffLeft = new SimpleMotorFeedforward(Vals.drive_left_ks, Vals.drive_left_kv);
+        ffRight = new SimpleMotorFeedforward(Vals.drive_right_ks, Vals.drive_right_kv);
 
         this.rotationController = rotationController;
-        this.startPose = currentPose;
-        odometry = new DifferentialDriveOdometry(new Rotation2d(rotationController.getAngleRadians()), currentPose);
-
-    }
-
-    public PositionController(Pose2d currentPose, RotationController rotationController) {
-        this(currentPose, rotationController, 2.0, 0.7);
-    }
-
-    /**
-     * Update current position
-     * @param driveTrainDistance
-     */
-    public void update(double[] driveTrainDistance) {
-        double leftDistanceInch = driveTrainDistance[0] / Vals.TICKS_PER_INCH_MOVEMENT;
-        double rightDistanceInch = driveTrainDistance[1] / Vals.TICKS_PER_INCH_MOVEMENT;
-        odometry.update(new Rotation2d(rotationController.getAngleRadians()), leftDistanceInch, rightDistanceInch);
 
     }
 
@@ -49,8 +42,10 @@ public class PositionController {
      * Functional code with no use outside of tuning
      */
     public void updatePID() {
-        pidDrive.setPID(Vals.drive_kp, Vals.drive_ki, Vals.drive_kd);
-        pidDrive.setTolerance(Vals.drive_tolerance);
+        pDrive.setP(Vals.drive_position_kp);
+        pDrive.setTolerance(Vals.drive_tolerance);
+        ffLeft = new SimpleMotorFeedforward(Vals.drive_left_ks, Vals.drive_left_kv);
+        ffRight = new SimpleMotorFeedforward(Vals.drive_right_ks, Vals.drive_right_kv);
     }
 
     /**
@@ -63,13 +58,32 @@ public class PositionController {
         return Math.hypot(a.getX() - b.getX(), a.getY() - b.getY());
     }
 
-    private double getRotationToPoint(Pose2d target, Pose2d o) {
-        double dy = target.getY() - o.getY();
-        double dx = -target.getX() + o.getX();
+    public void rotateInPlace(double degrees) {
+        double rotatePower = rotationController.rotate(degrees);
+        double leftPower = -rotatePower;
+        double rightPower = rotatePower;
 
-//        if(dx == 0) return 0;
+        driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+    }
 
-        return Math.toDegrees(Math.atan2(dx, dy));
+    public boolean goStraight(double dist, double maxSpeed) {
+        double dx = driveTrain.getAverageDistance();
+        double rotatePower = rotationController.rotate(0);
+        double driveSpeed = Math.min(Math.max(pDrive.calculate(dx, dist), -maxSpeed), maxSpeed);
+        Vals.test_pDrive_val = driveSpeed;
+
+        double leftPower = -rotatePower + driveSpeed;// + ffLeft.calculate(lastLeftPower);
+        double rightPower = rotatePower + driveSpeed;// + ffRight.calculate(lastRightPower);
+
+        lastLeftPower = leftPower;
+        lastRightPower = rightPower;
+
+        driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+        if(pDrive.atSetPoint()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -87,8 +101,8 @@ public class PositionController {
     }
 
     public void reset() {
-        pidDrive.reset();
-        startPose = odometry.getPoseMeters();
+        driveTrain.resetEncoders();
+        pDrive.reset();
         rotationController.resetAngle();
     }
 

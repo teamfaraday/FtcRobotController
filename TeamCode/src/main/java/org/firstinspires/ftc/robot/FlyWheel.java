@@ -37,6 +37,10 @@ public class FlyWheel {
         lastVelocity = 0;
     }
 
+    public double getFlywheelFilteredSpeed() {
+        return Vals.flywheel_filtered_speed;
+    }
+
     private void set() {
         updateVelocity();
         double power = 0;

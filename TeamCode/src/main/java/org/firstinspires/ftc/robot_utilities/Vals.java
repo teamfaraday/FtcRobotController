@@ -22,30 +22,30 @@ public class Vals {
     public static double flywheel_filtered_speed = 0;
     public static int flywheel_max_achievable_ticks = 1360;
 
-    public static double rotate_kp = .014;
-    public static double rotate_ki = .15;
+    public static double rotate_kp = .015;
+    public static double rotate_ki = .11;
     public static double rotate_kd = .0003;
     public static double rotate_tolerance = 1;
     public static double rotate_target = 0;
 
-    public static double drive_kp = .05;  //.1
+    public static double drive_kp = .005;  //.1
+    public static double drive_position_kp = .005;
+    public static double drive_position_max_speed = .8;
+    public static double drive_tolerance = 10;
     public static double drive_ki = 0; //.11
     public static double drive_kd = 0; //.0003
     public static double drive_ks = 1;
     public static double drive_kv = 3;
-    public static double drive_ramsete_b = 2.0; //0.9
-    public static double drive_ramsete_zeta = 0.7;
-    public static double drive_tolerance = 1;
-    public static double drive_target_x = 45;
-    public static double drive_target_y = -65;
-    public static double drive_linear_velocity_mps = .1;
-    public static double drive_angular_velocity_radians = 1;
+    public static double drive_left_ks = 1;
+    public static double drive_left_kv = 3;
+    public static double drive_right_ks = 1;
+    public static double drive_right_kv = 3;
 
     public static double intake_speed = 0.7;
 
     public static final double POSITION_PRE_MOVEMENT = 5;
 
-    public static final double TICKS_PER_INCH_MOVEMENT = 40.58;
+    public static final double TICKS_PER_INCH_MOVEMENT = 41.66666666667;
     public static final double MAX_LINEAR_VELOCITY_METERS_PER_SECOND = 0.818;
     public static final double MAX_ANGULAR_VELOCITY_DEGREES = 293.878;
     public static final double MAX_ANGULAR_VELOCITY_RADIANS = 5.129;
@@ -73,4 +73,7 @@ public class Vals {
     public static double motorReturnToDefault = 0.0;
 
     public static int vision_horizon = 75;
+
+    public static double test_travel_dist = 0;
+    public static double test_pDrive_val = 0;
 }

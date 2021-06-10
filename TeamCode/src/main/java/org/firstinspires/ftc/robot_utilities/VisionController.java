@@ -3,7 +3,7 @@ package org.firstinspires.ftc.robot_utilities;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
-import com.arcrobotics.ftclib.vision.UGContourRingPipeline;
+import com.arcrobotics.ftclib.vision .UGContourRingPipeline;
 
 public class VisionController {
 

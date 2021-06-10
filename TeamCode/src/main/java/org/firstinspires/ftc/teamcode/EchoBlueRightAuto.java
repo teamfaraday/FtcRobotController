@@ -31,6 +31,7 @@ public class EchoBlueRightAuto extends OpMode {
 
     boolean notStarted = true;
     int ringStackSize = -1;
+    int tick = 0;
 
 
     public void init() {
@@ -43,13 +44,15 @@ public class EchoBlueRightAuto extends OpMode {
         rotationController = new RotationController(hardwareMap.get(BNO055IMU.class, "imu"));
         rotationController.resetAngle();
 
-        driveTrain = new DriveTrain(new Motor(hardwareMap, "dl"), new Motor(hardwareMap, "dr"));
+        driveTrain = new DriveTrain(new Motor(hardwareMap, "dl"), new Motor(hardwareMap, "dr"), Motor.RunMode.RawPower);
         driveTrain.resetEncoders();
         flywheel = new FlyWheel(new Motor(hardwareMap, "fw", Motor.GoBILDA.BARE), telemetry);
         wobbleSystem = new WobbleSystem(new Motor(hardwareMap, "wobbleArmMotor"), hardwareMap.servo.get("wobbleArmServo"));
         wobbleSystem.hand_close();
+        wobbleSystem.arm_up();
         hitter = new Hitter(hardwareMap.servo.get("sv"));
         intake = new Intake(new Motor(hardwareMap, "in1"),  new Motor(hardwareMap, "in2"));
+
 
     }
 
@@ -67,28 +70,63 @@ public class EchoBlueRightAuto extends OpMode {
 
         switch(ringStackSize) {
             case 0:
-                if(elapsedTime.seconds() < 1.7) {
+                if(elapsedTime.seconds() < 1.5) { //go to A
                     double rotatePower = rotationController.rotate(22);
-
-                    double leftPower = -rotatePower;
-                    double rightPower = rotatePower;
-
-                    leftPower += driveSpeed;
-                    rightPower += driveSpeed;
-
+                    double leftPower = -rotatePower + driveSpeed;
+                    double rightPower = rotatePower + driveSpeed;
 
                     driveTrain.setSpeedPositiveForward(leftPower, rightPower);
-                } else if(elapsedTime.seconds() < 3) {
+                } else if(elapsedTime.seconds() < 2.2) { // stop
                     driveTrain.stop();
-                } else if(elapsedTime.seconds() < 4.5) {
+                } else if(elapsedTime.seconds() < 3.5) { // drop off wobble goal
                     telemetry.addData("Wobble Arm Location", wobbleSystem.wobbleArm.getCurrentPosition());
                     telemetry.addData("Wobble Arm Speed", wobbleSystem.wobbleArm.get());
                     telemetry.addData("Wobble Hand Pos", wobbleSystem.wobbleHand.getPosition());
                     telemetry.update();
                     wobbleSystem.arm_down();
-                } else if(elapsedTime.seconds() < 5.5) {
+                } else if(elapsedTime.seconds() < 4.2) { // drop off wobble goal
                     wobbleSystem.hand_open();
-                } else {
+                    rotationController.resetAngle();
+                } else if(elapsedTime.seconds() < 4.7) {
+                    double rotatePower = rotationController.rotate(0);
+                    double leftPower = -rotatePower - driveSpeed;
+                    double rightPower = rotatePower - driveSpeed;
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                }else if(elapsedTime.seconds() < 5.1) {
+                    wobbleSystem.hand_close();
+                } else if(elapsedTime.seconds() < 5.3) {
+                    wobbleSystem.arm_up();
+                    driveTrain.stop();
+                    rotationController.resetAngle();
+                } else if(elapsedTime.seconds() < 7) {
+                    wobbleSystem.arm_up();
+                    double rotatePower = rotationController.rotate(-20);
+                    double leftPower = -rotatePower;
+                    double rightPower = rotatePower;
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                }else if(elapsedTime.seconds() < 7.4) {
+                    driveTrain.stop();
+                    rotationController.resetAngle();
+                }else if(tick < 3 && elapsedTime.seconds() < 17) {
+                    flywheel.on();
+                    if(flywheel.isReady()) {
+                        hitter.hitFullMotion(0.71);
+                        tick++;
+                    }
+                } else if(elapsedTime.seconds() < 18) {
+                    flywheel.off();
+                } else if(elapsedTime.seconds() < 19) {
+                    flywheel.off();
+                    double rotatePower = rotationController.rotate(0);
+                    double leftPower = -rotatePower + driveSpeed;
+                    double rightPower = rotatePower + driveSpeed;
+
+                    driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+                } else if(elapsedTime.seconds() < 20) {
+                    driveTrain.stop();
+                } else{
                     requestOpModeStop();
                 }
                 break;
@@ -99,5 +137,7 @@ public class EchoBlueRightAuto extends OpMode {
             default:
                 stop();
         }
+
+        telemetry.addData("Flywheel Speed", flywheel.getFlywheelFilteredSpeed());
     }
 }
