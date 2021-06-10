@@ -46,6 +46,7 @@ public class Vals {
     public static final double POSITION_PRE_MOVEMENT = 5;
 
     public static final double TICKS_PER_INCH_MOVEMENT = 41.66666666667;
+    public static final double POWER_THRESHOLD = 0.13;
     public static final double MAX_LINEAR_VELOCITY_METERS_PER_SECOND = 0.818;
     public static final double MAX_ANGULAR_VELOCITY_DEGREES = 293.878;
     public static final double MAX_ANGULAR_VELOCITY_RADIANS = 5.129;

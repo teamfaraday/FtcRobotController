@@ -58,12 +58,16 @@ public class PositionController {
         return Math.hypot(a.getX() - b.getX(), a.getY() - b.getY());
     }
 
-    public void rotateInPlace(double degrees) {
+    public boolean rotateInPlace(double degrees) {
         double rotatePower = rotationController.rotate(degrees);
         double leftPower = -rotatePower;
         double rightPower = rotatePower;
 
         driveTrain.setSpeedPositiveForward(leftPower, rightPower);
+
+        Vals.test_pDrive_val = rotatePower;
+
+        return Math.abs(rotatePower) < Vals.POWER_THRESHOLD;
     }
 
     public boolean goStraight(double dist, double maxSpeed) {
@@ -80,10 +84,7 @@ public class PositionController {
 
         driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
-        if(pDrive.atSetPoint()) {
-            return true;
-        }
-        return false;
+        return pDrive.atSetPoint();
     }
 
     /**
