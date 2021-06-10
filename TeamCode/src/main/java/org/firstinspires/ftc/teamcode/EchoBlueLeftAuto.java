@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robot_utilities.VisionController;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
-@Autonomous(name = "EchoBlueRightAuto", group = "Echo Autos")
-public class EchoBlueRightAuto extends OpMode {
+@Autonomous(name = "EchoBlueLeftAuto", group = "Echo Autos")
+public class EchoBlueLeftAuto extends OpMode {
 
     ElapsedTime elapsedTime;
     VisionController visionController;
