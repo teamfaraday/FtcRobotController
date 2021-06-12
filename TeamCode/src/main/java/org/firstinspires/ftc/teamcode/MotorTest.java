@@ -21,31 +21,17 @@ public class MotorTest extends OpMode {
 
     @Override
     public void init() {
-        driveTrain = new DriveTrain(new Motor(hardwareMap, "dl"),
-                new Motor(hardwareMap, "dr"),
-                Motor.RunMode.RawPower);
+        motor = hardwareMap.dcMotor.get("fw");
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-//        motor = hardwareMap.dcMotor.get("fw");
         elapsedTime = new ElapsedTime();
         reset = true;
     }
 
     @Override
     public void loop() {
-        if (gamepad1.a) {
-            if(reset) {
-                reset = false;
-                elapsedTime.reset();
-            }
-            spinTime = elapsedTime.seconds();
-            driveTrain.setSpeed(1, -1);
-        } else {
-            reset = true;
-            driveTrain.setSpeed(0, 0);
-        }
+        motor.setPower(gamepad1.left_stick_y);
 
-        telemetry.addData("Right Speed", driveTrain.driveRight.getCorrectedVelocity());
-        telemetry.addData("Right Power", driveTrain.driveRight.get());
+        telemetry.addData("Flywheel Power", motor.getPower());
         telemetry.addData("Elapsed Time", spinTime);
     }
 
