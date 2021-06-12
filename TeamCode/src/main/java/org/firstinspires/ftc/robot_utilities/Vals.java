@@ -25,7 +25,8 @@ public class Vals {
     public static double rotate_kp = .015;
     public static double rotate_ki = .11;
     public static double rotate_kd = .0003;
-    public static double rotate_tolerance = 1;
+    public static double rotate_position_tolerance = 1;
+    public static double rotate_velocity_tolerance = Double.POSITIVE_INFINITY;
     public static double rotate_target = 0;
 
     public static double drive_kp = .005;  //.1
@@ -77,4 +78,6 @@ public class Vals {
 
     public static double test_travel_dist = 0;
     public static double test_pDrive_val = 0;
+    public static boolean test_pDrive_sp = false;
+    public static boolean test_rotation_sp = false;
 }

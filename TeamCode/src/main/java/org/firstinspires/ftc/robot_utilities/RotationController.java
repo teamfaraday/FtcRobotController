@@ -18,7 +18,7 @@ public class RotationController {
 
     public RotationController(BNO055IMU imu) {
         pidRotate = new PIDController(Vals.rotate_kp, Vals.rotate_ki, Vals.rotate_kd);
-        pidRotate.setTolerance(Vals.rotate_tolerance);
+        pidRotate.setTolerance(Vals.rotate_position_tolerance, Vals.rotate_velocity_tolerance);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -62,6 +62,8 @@ public class RotationController {
     }
 
     public double rotate(double degrees) {
+        pidRotate.setPID(Vals.rotate_kp, Vals.rotate_ki, Vals.rotate_kd);
+        pidRotate.setTolerance(Vals.rotate_position_tolerance, Vals.rotate_velocity_tolerance);
         if(Math.abs(degrees) > 359) degrees = Math.copySign(359, degrees);
 
         double power = pidRotate.calculate(updateHeading(), degrees);

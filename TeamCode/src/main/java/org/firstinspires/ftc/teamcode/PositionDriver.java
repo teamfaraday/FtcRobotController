@@ -60,8 +60,8 @@ public class PositionDriver extends OpMode {
             positionController.updatePID();
         }
 
-        atSetPoint = positionController.goStraight(Vals.test_travel_dist, Vals.drive_position_max_speed);
-//        atSetPoint = positionController.rotateInPlace(Vals.rotate_target);
+//        atSetPoint = positionController.goStraight(Vals.test_travel_dist, Vals.drive_position_max_speed);
+        atSetPoint = positionController.rotateInPlace(Vals.rotate_target);
 
 
         telemetry.addData("Distance Traveled", positionController.driveTrain.getAverageDistance());

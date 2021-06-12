@@ -34,7 +34,7 @@ public class RotationTuner extends OpMode {
         gamepad = new GamePadController(gamepad1);
 
         pidRotate = new PIDController(Vals.rotate_kp, Vals.rotate_ki, Vals.rotate_kd);
-        pidRotate.setTolerance(Vals.rotate_tolerance);
+        pidRotate.setTolerance(Vals.rotate_position_tolerance, Vals.rotate_velocity_tolerance);
 
         driveLeft = new Motor(hardwareMap, "dl");
         driveRight = new Motor(hardwareMap, "dr");

@@ -22,6 +22,7 @@ public class PositionController {
 
     private double lastLeftPower = 0;
     private double lastRightPower = 0;
+    private int ticks;
 
     public PositionController(RotationController rotationController,
                               Motor driveLeft, Motor driveRight) {
@@ -35,6 +36,8 @@ public class PositionController {
         ffRight = new SimpleMotorFeedforward(Vals.drive_right_ks, Vals.drive_right_kv);
 
         this.rotationController = rotationController;
+
+        ticks = 0;
 
     }
 
@@ -58,6 +61,10 @@ public class PositionController {
         return Math.hypot(a.getX() - b.getX(), a.getY() - b.getY());
     }
 
+    public void stop() {
+        driveTrain.stop();
+    }
+
     public boolean rotateInPlace(double degrees) {
         double rotatePower = rotationController.rotate(degrees);
         double leftPower = -rotatePower;
@@ -66,8 +73,17 @@ public class PositionController {
         driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
         Vals.test_pDrive_val = rotatePower;
+        Vals.test_rotation_sp = rotationController.atRotation();
 
-        return Math.abs(rotatePower) < Vals.POWER_THRESHOLD;
+        if (Math.abs(rotatePower) < Vals.POWER_THRESHOLD) {
+            ticks++;
+        }
+        if(ticks > 100) {
+            ticks = 0;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean goStraight(double dist, double maxSpeed) {
@@ -84,7 +100,20 @@ public class PositionController {
 
         driveTrain.setSpeedPositiveForward(leftPower, rightPower);
 
-        return (leftPower + rightPower) / 2 < Vals.POWER_THRESHOLD;
+        Vals.test_pDrive_sp = pDrive.atSetPoint();
+        Vals.test_rotation_sp = rotationController.atRotation();
+
+        if((leftPower + rightPower) / 2 < Vals.POWER_THRESHOLD) {
+            ticks++;
+        }
+
+        if(ticks > 100) {
+            ticks = 0;
+            return true;
+        }
+
+        return false;
+
     }
 
     /**
